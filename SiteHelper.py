@@ -65,7 +65,7 @@ SITE_DATA = {
                 "name": "Page",
                 "type": "selection",
                 "params": {
-                    "options": ["profile", "battery"]
+                    "options": ["profile", "battery", "storm-guard"]
                 }
             },
             "siteId": {
@@ -79,8 +79,10 @@ SITE_DATA = {
             },
             "source": {
                 "name": "Source",
-                "type": "constant",
-                "value": "enho"
+                "type": "selection",
+                "params": {
+                    "options": ["enho", "itk"]
+                }
             },
             "uiType": {
                 "name": "UI Type",
@@ -95,11 +97,6 @@ SITE_DATA = {
                 "params": {
                     "options": ["light", "dark"]
                 }
-            },
-            "elu": {
-                "name": "ELU",
-                "type": "constant",
-                "value": 0
             },
             "locale": {
                 "name": "Language",
@@ -159,26 +156,10 @@ SITE_DATA = {
                     ]
                 }
             },
-            "isAutoFillFeatureEnabled": {
-                "name": "Is Auto Fill Feature Enabled?",
-                "type": "selection",
-                "params": {
-                    "options": ["1", "0"]
-                }
-            },
-            "isTariffMqttEnabled": {
-                "name": "Is Tariff MQTT Enabled?",
-                "type": "selection",
-                "params": {
-                    "options": ["1", "0"]
-                }
-            },
-            "isManualUpdateEnabled": {
-                "name": "Is Manual Update Enabled?",
-                "type": "selection",
-                "params": {
-                    "options": ["1", "0"]
-                }
+            "elu": {
+                "name": "ELU",
+                "type": "constant",
+                "value": 0
             }
         }
     }

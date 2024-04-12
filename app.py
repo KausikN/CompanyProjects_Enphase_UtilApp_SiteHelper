@@ -57,6 +57,13 @@ def UI_SiteLinks():
     if len(list(SITE_DATA[USERINPUT_Project]["session_params"].keys())):
         st.markdown("### Session Parameters")
         USERINPUT_SessionParams = UI_GetParams(SITE_DATA[USERINPUT_Project]["session_params"])
+    ## Custom Parameters
+    st.markdown("### Custom Parameters")
+    USERINPUT_CustomParams = json.loads(st.text_area(
+        "Custom Parameters",
+        value="{}"
+    ))
+    USERINPUT_SessionParams.update(USERINPUT_CustomParams)
 
     # Process Inputs
     LINK = SiteHelper_FormSiteLink(
