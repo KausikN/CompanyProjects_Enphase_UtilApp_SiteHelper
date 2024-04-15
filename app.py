@@ -83,10 +83,38 @@ def UI_SiteLinks():
     cols[0].markdown("JSON")
     cols[1].json([LINK])
 
+def UI_SiteAdminLinks():
+    '''
+    UI - Site Admin Links
+    '''
+    # Title
+    st.markdown("# Site Admin Links")
+
+    # Load Prereq Inputs
+
+    # Load Inputs
+    ## Parameters
+    st.markdown("## Parameters")
+    USERINPUT_Env = st.selectbox("Select Environment", list(ADMIN_SITE_DATA["environments"].keys()))
+    USERINPUT_SiteID = st.number_input("Site ID", value=53)
+    USERINPUT_Params = {
+        "site_id": USERINPUT_SiteID
+    }
+
+    # Process Inputs
+    LINKS = {
+        k: ADMIN_SITE_DATA["environments"][USERINPUT_Env]["domain"] + ADMIN_SITE_DATA["links"][k].format(**USERINPUT_Params)
+        for k in ADMIN_SITE_DATA["links"].keys()
+    }
+
+    # Display Outputs
+    st.markdown("## Links")
+    st.json(LINKS)
 
 # UI Vars
 TOOLS = {
-    "Site Links": UI_SiteLinks
+    "Site Links": UI_SiteLinks,
+    "Site Admin Links": UI_SiteAdminLinks
 }
 
 # App Functions

@@ -165,6 +165,42 @@ SITE_DATA = {
     }
 }
 
+ADMIN_SITE_DATA = {
+    "environments": {
+        "Production": {
+            "domain": "https://enlighten.enphaseenergy.com/"
+        },
+        "Pre-Production": {
+            "domain": "https://enlighten-preprod.enphaseenergy.com/"
+        },
+        "Stage - QA2": {
+            "domain": "https://qa2.enphaseenergy.com/"
+        },
+        "Release": {
+            "domain": "https://enlighten-rel.enphaseenergy.com/"
+        }
+    },
+    "links": {
+        "Manager - Dashboard": "manager/dashboard",
+        "Manager - Systems": "manager/dashboard/systems",
+        "System - Dashboard": "systems/{site_id}",
+        "System - Devices": "systems/{site_id}/devices",
+        "System - Details": "systems/{site_id}/details",
+        "Admin - Dashboard": "admin/sites/{site_id}",
+        "Admin - Devices": "admin/sites/{site_id}/devices",
+        "Admin - Events": "admin/sites/{site_id}/events",
+        "Admin - Access": "admin/sites/{site_id}/access",
+        "Admin - System Log": "admin/sites/{site_id}/log",
+        "Admin - Email Log": "admin/sites/{site_id}/email_log",
+        "Admin - Gateway / EMU Reports": "admin/sites/{site_id}/emu_reports",
+        "Admin - Rollup": "admin/sites/{site_id}/rollup",
+        "EEAdmin - Dashboard": "eeadmin/sites/{site_id}",
+        "EEAdmin - Tasks": "eeadmin/task/show_task/{site_id}",
+        "EEAdmin - Command History": "eeadmin/sites/{site_id}/command_history",
+        "EEAdmin - Analytics": "eeadmin/analytics/{site_id}"
+    }
+}
+
 # Main Functions
 def SiteHelper_FormSiteLink(domain, params, session_params):
     '''
