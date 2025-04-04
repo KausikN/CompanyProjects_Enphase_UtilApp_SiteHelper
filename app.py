@@ -111,10 +111,192 @@ def UI_SiteAdminLinks():
     st.markdown("## Links")
     st.json(LINKS)
 
+def UI_SiteAPISearch():
+    '''
+    UI - Site Admin Links
+    '''
+    # Title
+    st.markdown("# Site API Search")
+
+    # Operations
+    OPERATIONS = {
+        "Collect API Responses": UI_SiteAPISearch_CollectAPIResponses,
+        "Search Sites": UI_SiteAPISearch_SearchSites,
+
+    }
+    USERINPUT_Operation = st.sidebar.selectbox(
+        "Select Operation",
+        list(OPERATIONS.keys())
+    )
+
+    # Execute Operation
+    OPERATIONS[USERINPUT_Operation]()
+
+def UI_SiteAPISearch_CollectAPIResponses():
+    '''
+    UI - Site API Search - Collect API Responses
+    '''
+    # Title
+    st.markdown("# Collect API Responses")
+
+    # Load Prereq Inputs
+
+    # Load Inputs
+    ## API
+    st.markdown("## API")
+    USERINPUT_API = st.selectbox("Select API", list(SITE_APIS_DATA.keys()))
+
+    ## Env
+    USERINPUT_Env = st.selectbox("Select Environment", list(SITE_APIS_DATA[USERINPUT_API]["env_url_map"].keys()))
+    USERINPUT_APIURL = SITE_APIS_DATA[USERINPUT_API]["env_url_map"][USERINPUT_Env]
+    st.markdown(f"```\n{USERINPUT_APIURL}\n```")
+
+    ## Sites
+    st.markdown("## Sites")
+    USERINPUT_Sites = []
+    USERINPUT_SiteInputType = st.selectbox("Select Sites Input Type", ["Enlighten Admin Data API Format", "JSON Array"])
+    if USERINPUT_SiteInputType == "Enlighten Admin Data API Format":
+        USERINPUT_Sites = json.loads(st.text_area(
+            "Sites in Admin Data API Format",
+            value="[]"
+        ))
+        USERINPUT_Sites = SiteHelper_AdminDataAPIDecoder(USERINPUT_Sites) 
+    elif USERINPUT_SiteInputType == "JSON Array":
+        USERINPUT_Sites = json.loads(st.text_area(
+            "Sites JSON Array",
+            value="[]"
+        ))
+
+    ## Parameters
+    st.markdown("## Parameters")
+    USERINPUT_URLReplaceParams = json.loads(st.text_area(
+        "URL Replace Parameters",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["url_replace_params"], indent=8)
+    ))
+    USERINPUT_URLParams = json.loads(st.text_area(
+        "URL Parameters",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["url_params"], indent=8)
+    ))
+    USERINPUT_Cookies = json.loads(st.text_area(
+        "Cookies",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["cookies"], indent=8)
+    ))
+    USERINPUT_Headers = json.loads(st.text_area(
+        "Headers",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["headers"], indent=8)
+    ))
+
+    # Process Inputs
+    st.markdown("## Process")
+    USERINPUT_Process = st.button("Process")
+    if not USERINPUT_Process: return
+    
+    API_DATA = {
+        "name": USERINPUT_API,
+        "env": USERINPUT_Env
+    }
+    PROGRESS_BAR = st.progress(0.0, f"0/{len(USERINPUT_Sites)}")
+    for i in range(len(USERINPUT_Sites)):
+        CUR_URLReplaceParams = dict(USERINPUT_URLReplaceParams)
+        CUR_URLReplaceParams.update({
+            "site": USERINPUT_Sites[i]
+        })
+        RESPONSE = SITE_APIS_DATA[USERINPUT_API]["request_func"](
+            USERINPUT_APIURL,
+            CUR_URLReplaceParams,
+            USERINPUT_URLParams,
+            USERINPUT_Cookies,
+            USERINPUT_Headers
+        )
+        SITE_RESPONSE = {
+            "site": USERINPUT_Sites[i],
+            "params": {
+                "url_replace_params": dict(CUR_URLReplaceParams),
+                "url_params": dict(USERINPUT_URLParams),
+                "cookies": dict(USERINPUT_Cookies),
+                "headers": dict(USERINPUT_Headers)
+            },
+            "status_code": RESPONSE.status_code,
+            "response_json": RESPONSE.json()
+        }
+        SiteHelper_SaveSiteAPIResponses(API_DATA, SITE_RESPONSE)
+        PROGRESS_BAR.progress(round((i+1)/len(USERINPUT_Sites), 2), f"{i+1}/{len(USERINPUT_Sites)}")
+
+    # Display Outputs
+    st.markdown("Collection Completed ✅")
+
+def UI_SiteAPISearch_SearchSites():
+    '''
+    UI - Site API Search - Search Sites
+    '''
+    # Title
+    st.markdown("# Search Sites")
+
+    # Load Prereq Inputs
+
+    # Load Inputs
+    ## API
+    st.markdown("## API")
+    USERINPUT_API = st.selectbox("Select API", list(SITE_APIS_DATA.keys()))
+
+    ## Env
+    USERINPUT_Env = st.selectbox("Select Environment", list(SITE_APIS_DATA[USERINPUT_API]["env_url_map"].keys()))
+    USERINPUT_APIURL = SITE_APIS_DATA[USERINPUT_API]["env_url_map"][USERINPUT_Env]
+    st.markdown(f"```\n{USERINPUT_APIURL}\n```")
+
+    ## Parameters
+    st.markdown("## Parameters")
+    USERINPUT_URLReplaceParams = json.loads(st.text_area(
+        "Match URL Replace Parameters",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["url_replace_params"], indent=8)
+    ))
+    USERINPUT_URLParams = json.loads(st.text_area(
+        "Match URL Parameters",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["url_params"], indent=8)
+    ))
+    USERINPUT_Cookies = json.loads(st.text_area(
+        "Match Cookies",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["cookies"], indent=8)
+    ))
+    USERINPUT_Headers = json.loads(st.text_area(
+        "Match Headers",
+        value=json.dumps(SITE_APIS_DATA[USERINPUT_API]["default_params"]["headers"], indent=8)
+    ))
+
+    ## Match Response
+    st.markdown("## Response Match")
+    USERINPUT_MatchResponse = json.loads(st.text_area(
+        "Match Response",
+        value="{}"
+    ))
+
+    # Process Inputs
+    st.markdown("## Process")
+    USERINPUT_Process = st.button("Process")
+    if not USERINPUT_Process: return
+    
+    API_DATA = {
+        "name": USERINPUT_API,
+        "env": USERINPUT_Env
+    }
+    MATCH_PARAMS = {
+        "url_replace_params": dict(USERINPUT_URLReplaceParams),
+        "url_params": dict(USERINPUT_URLParams),
+        "cookies": dict(USERINPUT_Cookies),
+        "headers": dict(USERINPUT_Headers)
+    }
+    PROGRESS_BAR = st.progress(0.0)
+    MATCHES = SiteHelper_SearchSiteAPIResponses(API_DATA, MATCH_PARAMS, USERINPUT_MatchResponse, PROGRESS_BAR=PROGRESS_BAR)
+
+    st.json(MATCHES)
+
+
+
 # UI Vars
 TOOLS = {
     "Site Links": UI_SiteLinks,
-    "Site Admin Links": UI_SiteAdminLinks
+    "Site Admin Links": UI_SiteAdminLinks,
+    "Site API Search": UI_SiteAPISearch,
 }
 
 # App Functions
