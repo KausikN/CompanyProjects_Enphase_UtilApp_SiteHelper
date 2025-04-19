@@ -369,8 +369,14 @@ def SiteHelper_SearchSiteAPIResponses(api_data, match_params, match_response, da
             MATCHES[site] = MATCHES_SITE
 
         if PROGRESS_BAR is not None: PROGRESS_BAR.progress(round((i+1) / len(SITES), 2), f"{i+1}/{len(SITES)}")
+
+    OUT = {
+        "n_sites_total": len(SITES),
+        "n_matches": len(list(MATCHES.keys())),
+        "matches": MATCHES
+    }
     
-    return MATCHES
+    return OUT
             
     
 

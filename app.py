@@ -286,7 +286,8 @@ def UI_SiteAPISearch_SearchSites():
         "headers": dict(USERINPUT_Headers)
     }
     PROGRESS_BAR = st.progress(0.0)
-    MATCHES = SiteHelper_SearchSiteAPIResponses(API_DATA, MATCH_PARAMS, USERINPUT_MatchResponse, PROGRESS_BAR=PROGRESS_BAR)
+    MATCHES_DATA = SiteHelper_SearchSiteAPIResponses(API_DATA, MATCH_PARAMS, USERINPUT_MatchResponse, PROGRESS_BAR=PROGRESS_BAR)
+    MATCHES = MATCHES_DATA["matches"]
 
     st.json(MATCHES)
 

@@ -140,7 +140,8 @@ def Script_SiteAPISearch_SearchSites(ARGS):
         "cookies": dict(USERINPUT_Cookies),
         "headers": dict(USERINPUT_Headers)
     }
-    MATCHES = SiteHelper_SearchSiteAPIResponses(API_DATA, MATCH_PARAMS, USERINPUT_MatchResponse, show_tqdm=True)
+    MATCHES_DATA = SiteHelper_SearchSiteAPIResponses(API_DATA, MATCH_PARAMS, USERINPUT_MatchResponse, show_tqdm=True)
+    MATCHES = MATCHES_DATA["matches"]
 
     # Save
     json.dump(MATCHES, open(ARGS.out, "w"), indent=4)
