@@ -147,9 +147,10 @@ def Script_SiteAPISearch_SearchSites(ARGS):
 
 
 # Run Code
-ARGS = Utils_ParseArgs()
+if __name__ == "__main__":
+    ARGS = Utils_ParseArgs()
 
-if ARGS.type == "collect_api_responses":
-    Script_SiteAPISearch_CollectAPIResponses(ARGS)
-else:
-    Script_SiteAPISearch_SearchSites(ARGS)
+    if ARGS.type == "collect_api_responses":
+        Script_SiteAPISearch_CollectAPIResponses(ARGS)
+    else:
+        Script_SiteAPISearch_SearchSites(ARGS)
