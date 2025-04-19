@@ -6,6 +6,7 @@ SiteHelper
 import os
 import json
 import time
+from tqdm import tqdm
 
 from APIHelpers.API_DataJSON import APIS_DATA as APIS_DATA_DataJSON
 
@@ -339,7 +340,7 @@ def SiteHelper_MatchSiteResponse(cur_match_field=None, match_response=None, resp
     return True
 
 
-def SiteHelper_SearchSiteAPIResponses(api_data, match_params, match_response, data_dir="Data/API_DATA/", PROGRESS_BAR=None):
+def SiteHelper_SearchSiteAPIResponses(api_data, match_params, match_response, data_dir="Data/API_DATA/", PROGRESS_BAR=None, show_tqdm=False):
     '''
     Site Helper - Save site API responses
     '''
@@ -349,7 +350,7 @@ def SiteHelper_SearchSiteAPIResponses(api_data, match_params, match_response, da
 
     MATCHES = {}
     if PROGRESS_BAR is not None: PROGRESS_BAR.progress(0.0, f"0/{len(SITES)}")
-    for i in range(len(SITES)):
+    for i in tqdm(range(len(SITES)), disable=(not show_tqdm)):
         site = SITES[i]
         site_responses = json.load(open(os.path.join(API_DATA_PATH, f"{site}.json"), "r"))
         MATCHES_SITE = []

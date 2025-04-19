@@ -26,7 +26,7 @@ def APIRequest_DataJSON(url, url_replace_params={}, url_params={}, cookies={}, h
     }
     URL_REPLACE_PARAMS.update(url_replace_params)
 
-    URL = "https://qa2.enphaseenergy.com/app-api/{site}/data.json"
+    URL = url # "https://qa2.enphaseenergy.com/app-api/{site}/data.json"
     URL = URL.format(**URL_REPLACE_PARAMS)
 
     RESPONSE = requests.get(
